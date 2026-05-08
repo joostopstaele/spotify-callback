@@ -406,9 +406,11 @@ function updateDots(uri){
   document.querySelectorAll('.track-row').forEach(r=>{r.classList.remove('playing');const d=r.querySelector('.play-dot');if(d)d.remove();});
   document.querySelectorAll(`[data-uri="${uri}"]`).forEach(r=>{r.classList.add('playing');if(!r.querySelector('.play-dot')){const d=document.createElement('div');d.className='play-dot';r.prepend(d);}});
 }
-async function playTrack(uri,queueUris,idx){
+const _Q={};
+async function playTrack(uri,qkey,idx){
   if(!deviceId){toast('Player wordt geladen...');return;}
-  const body=queueUris&&queueUris.length?{uris:queueUris,offset:{position:idx}}:{uris:[uri]};
+  const q=_Q[qkey]||[];
+  const body=q.length?{uris:q,offset:{position:idx}}:{uris:[uri]};
   await api('/me/player/play?device_id='+deviceId,{method:'PUT',body:JSON.stringify(body)});
 }
 async function togglePlay(){if(player)await player.togglePlay();}
@@ -435,7 +437,8 @@ async function toggleLike(id,btn,e){
 }
 
 function buildRow(t,i,uris,idx,reason=''){
-  return `<div class="track-row" data-uri="${t.uri}" onclick="playTrack('${t.uri}',${JSON.stringify(uris)},${idx})">
+  const qk='q'+Date.now()+i;_Q[qk]=uris;
+  return `<div class="track-row" data-uri="${t.uri}" onclick="playTrack('${t.uri}','${qk}',${idx})">
     <span class="track-num">${i+1}</span>
     ${t.album?.images?.[0]?`<img class="track-thumb" src="${t.album.images[0].url}" alt="">`:`<div class="track-thumb-ph">🎵</div>`}
     <div class="track-info">
