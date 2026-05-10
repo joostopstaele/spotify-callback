@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎸 Metal Discovery Dashboard</title>
+<title>🎵 Spotify Discovery</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--green:#1DB954;--bg:#080808;--bg2:#111111;--bg3:#1a1a1a;--border:#2a2a2a;--text:#e8e8e8;--muted:#666;}
@@ -22,15 +22,7 @@
   .setup-btn{background:var(--green);color:#000;border:none;padding:.85rem;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:1px;}
   .setup-btn:hover{background:#1ed760;}
   .setup-hint{font-size:.72rem;color:var(--muted);text-align:center;line-height:1.5;}
-  #passwordScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:1.5rem;padding:2rem;background:radial-gradient(ellipse at 50% 0%,#0d2818 0%,#080808 60%);}
-  .pw-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:2rem;width:100%;max-width:380px;display:flex;flex-direction:column;gap:1rem;text-align:center;}
-  .pw-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:#fff;}
-  .pw-sub{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--muted);letter-spacing:1px;}
-  .pw-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:1rem;outline:none;transition:border .2s;text-align:center;letter-spacing:4px;}
-  .pw-input:focus{border-color:var(--green);}
-  .pw-btn{background:var(--green);color:#000;border:none;padding:.85rem;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:1px;}
-  .pw-btn:hover{background:#1ed760;}
-  .pw-error{font-size:.8rem;color:#e74c3c;font-family:'Share Tech Mono',monospace;display:none;}
+
 
   /* LOGIN SCREEN */
   #loginScreen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:2rem;padding:2rem;background:radial-gradient(ellipse at 50% 0%,#0d2818 0%,#080808 60%);}
@@ -154,25 +146,9 @@
 <body>
 <div class="toast" id="toast"></div>
 
-<!-- SETUP: API KEYS -->
-<!-- WACHTWOORD SCHERM -->
-<div id="passwordScreen">
-  <div>
-    <div class="login-title">METAL<br><span>DISCOVERY</span></div>
-    <div class="login-sub">// BEVEILIGD DASHBOARD //</div>
-  </div>
-  <div class="pw-card">
-    <div class="pw-title">🔒 TOEGANGSCODE</div>
-    <div class="pw-sub">// Voer je wachtwoord in</div>
-    <input type="password" class="pw-input" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
-    <button class="pw-btn" onclick="checkPassword()">▶ Bevestigen</button>
-    <div class="pw-error" id="pwError">❌ Verkeerd wachtwoord</div>
-  </div>
-</div>
-
 <div id="setupScreen">
   <div>
-    <div class="setup-title">METAL<br><span>DISCOVERY</span></div>
+    <div class="setup-title">SPOTIFY<br><span>DISCOVERY</span></div>
     <div class="setup-sub">// EENMALIGE CONFIGURATIE //</div>
   </div>
   <div class="setup-card">
@@ -187,8 +163,8 @@
 <!-- LOGIN: SPOTIFY -->
 <div id="loginScreen">
   <div>
-    <div class="login-title">METAL<br><span>DISCOVERY</span></div>
-    <div class="login-sub">// SPOTIFY DASHBOARD //</div>
+    <div class="login-title">SPOTIFY<br><span>DISCOVERY</span></div>
+    <div class="login-sub">// SPOTIFY DISCOVERY //</div>
   </div>
   <button class="login-btn" onclick="startLogin()">▶ Inloggen met Spotify</button>
   <div class="callback-section">
@@ -228,7 +204,7 @@
 <!-- DASHBOARD -->
 <div id="dashboard">
   <div class="topbar">
-    <div class="topbar-logo">🎸 METAL DISCOVERY</div>
+    <div class="topbar-logo">🎵 SPOTIFY DISCOVERY</div>
     <div class="topbar-user">
       <div class="avatar-ph" id="avatarEl">?</div>
       <span style="font-size:.85rem" id="usernameEl">—</span>
@@ -250,7 +226,7 @@
       <div class="time-range">
         <button class="range-btn active" onclick="loadTopTracks('short_term',this)">4 weken</button>
         <button class="range-btn" onclick="loadTopTracks('medium_term',this)">6 maanden</button>
-        <button class="range-btn" onclick="loadTopTracks('long_term',this)">Alle tijd</button>
+        <button class="range-btn" onclick="loadTopTracks('long_term',this)">~ 2 jaar</button>
       </div>
       <div class="track-list" id="topTracksList"><div class="loading">Laden</div></div>
     </div>
@@ -261,7 +237,7 @@
       <div class="time-range">
         <button class="range-btn active" onclick="loadTopArtists('short_term',this)">4 weken</button>
         <button class="range-btn" onclick="loadTopArtists('medium_term',this)">6 maanden</button>
-        <button class="range-btn" onclick="loadTopArtists('long_term',this)">Alle tijd</button>
+        <button class="range-btn" onclick="loadTopArtists('long_term',this)">~ 2 jaar</button>
       </div>
       <div class="grid" id="artistGrid"><div class="loading">Laden</div></div>
       <div id="artistTracks" style="display:none;margin-top:1.5rem">
@@ -340,39 +316,6 @@ let progressInterval=null,currentPos=0,currentDur=0;
 let topTrackUris=[],topArtistNames=[],topTrackNames=[];
 
 // SETUP
-// WACHTWOORD - wijzig dit naar jouw eigen wachtwoord
-const APP_PASSWORD = 'metal2024!';
-
-function checkPassword(){
-  const pw = document.getElementById('pwInput').value;
-  const err = document.getElementById('pwError');
-  if(pw === APP_PASSWORD){
-    sessionStorage.setItem('pw_ok','1');
-    document.getElementById('passwordScreen').style.display='none';
-    // Ga naar setup of dashboard
-    const ck = localStorage.getItem('claude_key');
-    const token = localStorage.getItem('sp_token');
-    const exp = parseInt(localStorage.getItem('sp_exp')||0);
-    if(!ck){
-      document.getElementById('setupScreen').style.display='flex';
-    } else if(token && Date.now()<exp){
-      accessToken=token; CLIENT_ID=localStorage.getItem('sp_client_id')||''; CLAUDE_KEY=ck;
-      initDashboard();
-    } else if(localStorage.getItem('sp_refresh')){
-      CLIENT_ID=localStorage.getItem('sp_client_id')||''; CLAUDE_KEY=ck;
-      refreshToken().then(ok=>{ if(ok)initDashboard(); else document.getElementById('loginScreen').style.display='flex'; });
-    } else {
-      CLIENT_ID=localStorage.getItem('sp_client_id')||''; CLAUDE_KEY=ck;
-      document.getElementById('loginScreen').style.display='flex';
-    }
-  } else {
-    err.style.display='block';
-    document.getElementById('pwInput').value='';
-    document.getElementById('pwInput').focus();
-    setTimeout(()=>err.style.display='none', 3000);
-  }
-}
-
 function saveSetup(){
   const cid=document.getElementById('clientIdInput').value.trim();
   if(!cid){alert('Geef een Spotify Client ID in.');return;}
@@ -437,7 +380,7 @@ function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t
 // WEB PLAYBACK SDK
 window.onSpotifyWebPlaybackSDKReady=()=>{
   if(!accessToken)return;
-  player=new Spotify.Player({name:'🎸 Metal Discovery',getOAuthToken:cb=>cb(accessToken),volume:.8});
+  player=new Spotify.Player({name:'🎵 Spotify Discovery',getOAuthToken:cb=>cb(accessToken),volume:.8});
   player.addListener('ready',({device_id})=>{deviceId=device_id;api('/me/player',{method:'PUT',body:JSON.stringify({device_ids:[device_id],play:false})});});
   player.addListener('player_state_changed',state=>{
     if(!state)return;
@@ -506,6 +449,7 @@ function buildRow(t,i,uris,idx,reason=''){
       <div class="track-artist">${t.artists.map(a=>a.name).join(', ')}${t.album?' · '+t.album.name:''}</div>
       ${reason?`<div class="track-reason">✦ ${reason}</div>`:''}
     </div>
+    <span style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:${t.popularity>70?'#1DB954':t.popularity>40?'#f0a500':'var(--muted)'};flex-shrink:0;min-width:36px;text-align:right" title="Populariteit">⭐${t.popularity}</span>
     <span class="track-dur">${ms(t.duration_ms)}</span>
     <button class="track-like" onclick="toggleLike('${t.id}',this,event)">♥</button>
   </div>`;
@@ -561,7 +505,8 @@ async function loadTopArtists(range,btn){
     ${a.images[0]?`<img class="card-img" src="${a.images[0].url}" alt="">`:`<div class="card-img-ph">🎸</div>`}
     <div class="card-name">${a.name}</div>
     <div style="display:flex;flex-wrap:wrap;gap:4px">${a.genres.slice(0,2).map(g=>`<span class="tag">${g}</span>`).join('')}</div>
-    <div style="font-size:.7rem;color:var(--green);margin-top:4px;font-family:'Share Tech Mono',monospace">▶ klik om nummers te zien</div>
+    <div style="font-size:.7rem;margin-top:4px;font-family:'Share Tech Mono',monospace;color:${a.popularity>70?'#1DB954':a.popularity>40?'#f0a500':'var(--muted)'}">⭐ Populariteit: ${a.popularity}/100</div>
+    <div style="font-size:.7rem;color:var(--green);margin-top:2px;font-family:'Share Tech Mono',monospace">▶ klik om nummers te zien</div>
   </div>`).join('');
 }
 
@@ -696,11 +641,6 @@ function logout(){
 
 // INIT
 window.addEventListener('load',async()=>{
-  // Toon altijd eerst wachtwoordscherm (tenzij al ingevuld in deze sessie)
-  if(!sessionStorage.getItem('pw_ok')){
-    document.getElementById('passwordScreen').style.display='flex';
-    return;
-  }
   CLIENT_ID=localStorage.getItem('sp_client_id')||'';
   if(CLIENT_ID){
     document.getElementById('setupScreen').style.display='none';
