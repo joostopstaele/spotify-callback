@@ -155,7 +155,7 @@
     <div class="setup-label">// ANTHROPIC API KEY (sk-ant-...)</div>
     <input type="password" class="setup-input" id="claudeKeyInput" placeholder="sk-ant-api03-...">
     <div class="setup-label" style="margin-top:.5rem">// SPOTIFY CLIENT ID</div>
-    <input type="text" class="setup-input" id="clientIdInput" value="2b4f1449b32f4936aa06ef18fecebc4f">
+    <input type="text" class="setup-input" id="clientIdInput" placeholder="Spotify Client ID...">
     <button class="setup-btn" onclick="saveSetup()">▶ Starten</button>
     <div class="setup-hint">Je sleutels worden lokaal opgeslagen in je browser.<br>Ze worden nooit extern verstuurd behalve naar de respectieve APIs.</div>
   </div>
@@ -610,7 +610,7 @@ function logout(){
 // INIT
 window.addEventListener('load',async()=>{
   CLAUDE_KEY=localStorage.getItem('claude_key')||'';
-  CLIENT_ID=localStorage.getItem('sp_client_id')||'2b4f1449b32f4936aa06ef18fecebc4f';
+  CLIENT_ID=localStorage.getItem('sp_client_id')||'';
   if(CLAUDE_KEY){
     document.getElementById('setupScreen').style.display='none';
     const token=localStorage.getItem('sp_token');
