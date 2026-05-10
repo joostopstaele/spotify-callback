@@ -264,6 +264,13 @@
         <button class="range-btn" onclick="loadTopArtists('long_term',this)">Alle tijd</button>
       </div>
       <div class="grid" id="artistGrid"><div class="loading">Laden</div></div>
+      <div id="artistTracks" style="display:none;margin-top:1.5rem">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
+          <button onclick="closeArtistTracks()" style="background:var(--bg2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:.75rem">← Terug</button>
+          <div class="section-sub" style="margin:0" id="artistTracksTitle">// NUMMERS</div>
+        </div>
+        <div class="track-list" id="artistTracksList"></div>
+      </div>
     </div>
 
     <div class="section" id="sec-search">
@@ -550,10 +557,11 @@ async function loadTopArtists(range,btn){
   const d=await api('/me/top/artists?limit=24&time_range='+range);
   if(!d?.items){el.innerHTML='<div class="empty">Geen data.</div>';return;}
   topArtistNames=d.items.slice(0,10).map(a=>a.name);
-  el.innerHTML=d.items.map(a=>`<div class="card">
+  el.innerHTML=d.items.map(a=>`<div class="card" style="cursor:pointer" onclick="loadArtistTracks('${a.id}','${a.name.replace(/'/g,"\\'")}')">
     ${a.images[0]?`<img class="card-img" src="${a.images[0].url}" alt="">`:`<div class="card-img-ph">🎸</div>`}
     <div class="card-name">${a.name}</div>
     <div style="display:flex;flex-wrap:wrap;gap:4px">${a.genres.slice(0,2).map(g=>`<span class="tag">${g}</span>`).join('')}</div>
+    <div style="font-size:.7rem;color:var(--green);margin-top:4px;font-family:'Share Tech Mono',monospace">▶ klik om nummers te zien</div>
   </div>`).join('');
 }
 
@@ -630,6 +638,32 @@ Antwoord ALLEEN met een JSON array, geen uitleg, geen markdown backticks:
     thinking.classList.remove('show');btn.disabled=false;
     el.innerHTML=`<div class="empty">Fout: ${err.message}</div>`;
   }
+}
+
+async function loadArtistTracks(artistId, artistName){
+  const grid = document.getElementById('artistGrid');
+  const section = document.getElementById('artistTracks');
+  const list = document.getElementById('artistTracksList');
+  const title = document.getElementById('artistTracksTitle');
+  grid.style.display='none';
+  document.querySelector('#sec-artists .time-range').style.display='none';
+  section.style.display='block';
+  title.textContent='// TOP NUMMERS VAN '+artistName.toUpperCase();
+  list.innerHTML='<div class="loading">Laden</div>';
+  const d = await api('/artists/'+artistId+'/top-tracks?market=BE');
+  if(!d?.tracks){list.innerHTML='<div class="empty">Geen nummers gevonden.</div>';return;}
+  const uris = d.tracks.map(t=>t.uri);
+  const liked = await getLiked(d.tracks.map(t=>t.id));
+  list.innerHTML = d.tracks.map((t,i)=>{
+    const row = buildRow(t,i,uris,i);
+    return liked[t.id]?row.replace('class="track-like"','class="track-like liked"'):row;
+  }).join('');
+}
+
+function closeArtistTracks(){
+  document.getElementById('artistGrid').style.display='grid';
+  document.querySelector('#sec-artists .time-range').style.display='flex';
+  document.getElementById('artistTracks').style.display='none';
 }
 
 async function loadPlaylists(){
